@@ -1,24 +1,25 @@
 ﻿using AccountStorage.Models;
-using System.Collections.Generic;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace AccountStorage
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName]string Property = null)
+        public ObservableCollection<Account> Accounts { get; }
+
+        public ICommand AddAccountCommand { get; }
+        private void OnAddAccountCommandExecuted(object p)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Property));
+            Accounts.Add(new Account());
         }
 
-        private List<Account> accounts = new List<Account>();
-
-        public ICommand SetAccountListUC { get; }
         public MainWindowViewModel()
         {
+            Accounts = new ObservableCollection<Account>() { new Account() };
+            AddAccountCommand = new Command(OnAddAccountCommandExecuted);
         }
 
     }

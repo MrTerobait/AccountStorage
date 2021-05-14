@@ -1,11 +1,23 @@
-﻿namespace AccountStorage.Models
+﻿using System;
+
+namespace AccountStorage.Models
 {
+
     public class Account
     {
-        public string Description { get; }
+        public string Description { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
         public string Link { get; set; }
-        public string PasswordCreationDate { get; private set; }
+        private string _password;
+        public string Password
+        { 
+            get { return _password; } 
+            set 
+            {
+                _password = value;
+                LastPasswordUpdate = DateTime.Now;
+            } 
+        }
+        public DateTime LastPasswordUpdate { get; private set; }
     }
 }
