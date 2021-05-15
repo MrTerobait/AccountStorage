@@ -1,7 +1,5 @@
 ﻿using AccountStorage.Models;
 using System.Windows.Input;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 
 namespace AccountStorage
@@ -13,12 +11,12 @@ namespace AccountStorage
         public ICommand AddAccountCommand { get; }
         private void OnAddAccountCommandExecuted(object p)
         {
-            Accounts.Add(new Account());
+            Accounts.Add(new Account() { Description = "Почта какая-то" } );
         }
 
         public MainWindowViewModel()
         {
-            Accounts = new ObservableCollection<Account>() { new Account() };
+            Accounts = new ObservableCollection<Account>() { new Account() { Description = "Почта terobite.vladimr@mail.ru"} };
             AddAccountCommand = new Command(OnAddAccountCommandExecuted);
         }
 
