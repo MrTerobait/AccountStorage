@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AccountStorage.UCs
+namespace AccountStorage
 {
     /// <summary>
     /// Interaction logic for AccountList.xaml

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace AccountStorage
+namespace AccountStorage.ViewModels.BaseTypes
 {
     public class Command : ICommand
     {

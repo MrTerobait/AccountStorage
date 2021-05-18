@@ -1,5 +1,4 @@
-﻿using AccountStorage.UCs;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace AccountStorage
@@ -12,11 +11,6 @@ namespace AccountStorage
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void TextBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
         }
     }
 }
