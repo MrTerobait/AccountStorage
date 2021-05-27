@@ -11,6 +11,9 @@ namespace AccountStorage
         public MainWindow()
         {
             InitializeComponent();
+            MinimizeButton.Click += (s, e) => WindowState = WindowState.Minimized;
+            ChangeWindowStateButton.Click += (s, e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            CloseButton.Click += (s, e) => Close();
         }
     }
 }
