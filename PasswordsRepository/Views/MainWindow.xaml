@@ -4,12 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         xmlns:ic="http://schemas.fontawesome.com/icons/"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:AccountStorage"
         xmlns:vm="clr-namespace:AccountStorage.ViewModels"
-        xmlns:b="clr-namespace:AccountStorage.Behaviors"
-        Height="450" Width="800" Title="Keys Keeper" WindowStyle="None" AllowsTransparency="True"
-        Background="White"
+        Height="450" Width="800" Title="Keys Keeper" WindowStyle="None"
+        Background="White" BorderThickness="1" BorderBrush="Black"
         WindowState="Maximized">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="50"/>
@@ -18,16 +16,17 @@
         <Style TargetType="ic:FontAwesome">
             <Setter Property="FontSize" Value="30"/>
             <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=ButtonBase}}"/>
         </Style>
-        
-        <Style TargetType="Button" x:Key="BaseButton">
-            <Setter Property="Background" Value="Red"/>
+
+        <Style TargetType="ButtonBase" x:Key="EmptyButton">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True" 
+                    <ControlTemplate TargetType="ButtonBase">
+                        <Border SnapsToDevicePixels="true" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                     </ControlTemplate>
@@ -35,19 +34,21 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="Red"/>
+                    <Setter Property="Background" Value="LightGray"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="Path">
-            <Setter Property="Stroke" Value="Black"/>
-            <Setter Property="StrokeThickness" Value="3"/>
+        <Style TargetType="ToggleButton" x:Key="EmptyToggleButton" BasedOn="{StaticResource EmptyButton}">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="LightGray"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         
-        <GeometryGroup x:Key="ChangeWindowStateIcon">
-            <RectangleGeometry Rect="15 15 20 20"/>
-            <RectangleGeometry Rect="20 20 20 20"/>
-        </GeometryGroup>
     </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowVM/>
@@ -55,23 +56,46 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="44"/>
         </Grid.RowDefinitions>
-        <Border BorderBrush="Black" BorderThickness="0 0 0 3" Grid.Row="0" WindowChrome.IsHitTestVisibleInChrome="True">
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0 0 0 3" WindowChrome.IsHitTestVisibleInChrome="True">
+            <Grid>
+                <Button Style="{StaticResource EmptyButton}" HorizontalAlignment="Left" ToolTip="Настройки"
+                        Click="SettersOpenCloseButton">
+                    <ic:FontAwesome Icon="Solid_Cogs"/>
+                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource EmptyButton}" ToolTip="Свернуть" Click="MinimizeButton_Click">
+                        <ic:FontAwesome Icon="Regular_WindowMinimize"/>
+                    </Button>
+                    <Button Style="{StaticResource EmptyButton}" ToolTip="Уменьшить окно" Click="ChangeWindowStateButton_Click">
+                        <ic:FontAwesome Icon="Regular_WindowRestore"/>
+                    </Button>
+                    <Button Style="{StaticResource EmptyButton}" ToolTip="Закрыть" Click="CloseButton_Click">
+                        <ic:FontAwesome Icon="Regular_WindowClose"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="Black">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Column="1">
-                    <Button x:Name="MinimizeButton" Style="{StaticResource BaseButton}">
-                        <ic:FontAwesome Icon="Regular_WindowMinimize"/>
-                    </Button>
-                    <Button x:Name="ChangeWindowStateButton" Style="{StaticResource BaseButton}">
-                        <Path Data="{StaticResource ChangeWindowStateIcon}"/>
-                    </Button>
-                    <Button x:Name="CloseButton">
-                        <ic:FontAwesome Icon="Regular_WindowClose"/>
-                    </Button>
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <ToggleButton Style="{StaticResource EmptyToggleButton}" ToolTip="Список аккаунтов" Click="AccountListOpenCloseButton">
+                        <ic:FontAwesome Icon="Regular_ListAlt"/>
+                    </ToggleButton>
+                    <ToggleButton Style="{StaticResource EmptyToggleButton}" ToolTip="Корзина" Click="BasketOpenCloseButton">
+                        <ic:FontAwesome Icon="Regular_TrashAlt"/>
+                    </ToggleButton>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                    <ToggleButton Style="{StaticResource EmptyToggleButton}" ToolTip="Генератор пароля" Click="PasswordGeneratorOpenCloseButton">
+                        <ic:FontAwesome Icon="Solid_Dice"/>
+                    </ToggleButton>
                 </StackPanel>
             </Grid>
         </Border>
