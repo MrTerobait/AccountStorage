@@ -9,6 +9,9 @@
         Height="450" Width="800" Title="Keys Keeper" WindowStyle="None"
         Background="White" BorderThickness="1" BorderBrush="Black"
         WindowState="Maximized">
+    <Window.DataContext>
+        <vm:MainWindowVM/>
+    </Window.DataContext>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="50"/>
     </WindowChrome.WindowChrome>
@@ -18,15 +21,19 @@
             <Setter Property="Padding" Value="10 5"/>
             <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=ButtonBase}}"/>
         </Style>
-
         <Style TargetType="ButtonBase" x:Key="EmptyButton">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ButtonBase">
-                        <Border SnapsToDevicePixels="true" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True"
+                        <Border SnapsToDevicePixels="true" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                     </ControlTemplate>
@@ -48,11 +55,17 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+        <Style TargetType="ListBoxItem">
+            <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter Margin="0,10"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <Window.DataContext>
-        <vm:MainWindowVM/>
-    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -78,24 +91,64 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="Black">
+        <Border Grid.Row="1" x:Name="ViewPresenter">
+            <DockPanel>
+                <DockPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource EmptyButton}">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="Margin" Value="10 20"/>
+                        <Setter Property="Width" Value="250"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="BorderBrush" Value="Black"/>
+                    </Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource EmptyButton}" x:Key="AccountButton">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect RenderingBias="Performance"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DockPanel.Resources>
+                <Button DockPanel.Dock="Top" Content="Добавить аккаунт" Command="{Binding AddAccountCommand}"/>
+                <Border CornerRadius="10" BorderThickness="5" BorderBrush="Black" Margin="10">
+                    <ScrollViewer>
+                        <ListBox ItemsSource="{Binding AccountList}" BorderThickness="0">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Margin="20 10" HorizontalAlignment="Stretch"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource AccountButton}" Content="{Binding Description}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border Grid.Row="2" BorderThickness="0 2 0 0" BorderBrush="Black" Margin="0 10 0 0">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <ToggleButton Style="{StaticResource EmptyToggleButton}" ToolTip="Список аккаунтов" Click="AccountListOpenCloseButton">
-                        <ic:FontAwesome Icon="Regular_ListAlt"/>
-                    </ToggleButton>
-                    <ToggleButton Style="{StaticResource EmptyToggleButton}" ToolTip="Корзина" Click="BasketOpenCloseButton">
-                        <ic:FontAwesome Icon="Regular_TrashAlt"/>
-                    </ToggleButton>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource EmptyButton}">
+                        <ic:FontAwesome Icon="Regular_ListAlt" FontSize="20"/>
+                    </Button>
+                    <Button Style="{StaticResource EmptyButton}">
+                        <ic:FontAwesome Icon="Regular_TrashAlt" FontSize="20"/>
+                    </Button>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                    <ToggleButton Style="{StaticResource EmptyToggleButton}" ToolTip="Генератор пароля" Click="PasswordGeneratorOpenCloseButton">
-                        <ic:FontAwesome Icon="Solid_Dice"/>
-                    </ToggleButton>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource EmptyButton}">
+                        <ic:FontAwesome Icon="Solid_Dice" FontSize="20"/>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>

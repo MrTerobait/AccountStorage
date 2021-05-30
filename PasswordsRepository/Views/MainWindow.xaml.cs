@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using AccountStorage.ViewModels;
 
 namespace AccountStorage
 {
@@ -163,24 +164,9 @@ namespace AccountStorage
 
         #endregion
 
-        private void AccountListOpenCloseButton(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BasketOpenCloseButton(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void PasswordGeneratorOpenCloseButton(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void SettersOpenCloseButton(object sender, RoutedEventArgs e)
         {
-
+            //ViewPresenter.Child = new Setters();            
         }
     }
 }
