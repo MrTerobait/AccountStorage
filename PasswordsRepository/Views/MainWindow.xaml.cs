@@ -167,18 +167,27 @@ namespace AccountStorage
         #region ManageViews
         private void SwitchingToAccountListButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Setters.Visibility == Visibility.Visible)
+                Setters.Visibility = Visibility.Collapsed;
+
             AccountList.Visibility = Visibility.Visible;
             Basket.Visibility = Visibility.Collapsed;
         }
 
         private void SwitchingToBasketButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Setters.Visibility == Visibility.Visible)
+                Setters.Visibility = Visibility.Collapsed;
+
             Basket.Visibility = Visibility.Visible;
             AccountList.Visibility = Visibility.Collapsed;
         }
 
         private void ControlPasswordGeneratorVisibilityToggleButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Setters.Visibility == Visibility.Visible)
+                Setters.Visibility = Visibility.Collapsed;
+
             switch (PasswordGenerator.Visibility)
             {
                 case Visibility.Collapsed:
@@ -195,15 +204,9 @@ namespace AccountStorage
             switch (Setters.Visibility)
             {
                 case Visibility.Collapsed:
-                    AccountListButton.Click += ControlSettersVisibilityButton_Click;
-                    BasketButton.Click += ControlSettersVisibilityButton_Click;
-                    PasswordGeneratorButton.Click += ControlSettersVisibilityButton_Click;
                     Setters.Visibility = Visibility.Visible;
                     break;
                 case Visibility.Visible:
-                    AccountListButton.Click -= ControlSettersVisibilityButton_Click;
-                    BasketButton.Click -= ControlSettersVisibilityButton_Click;
-                    PasswordGeneratorButton.Click -= ControlSettersVisibilityButton_Click;
                     Setters.Visibility = Visibility.Collapsed;
                     break;
             }
@@ -224,16 +227,13 @@ namespace AccountStorage
             }
             else if(Setters.Visibility == Visibility.Collapsed)
             {
-                if (AccountList.Visibility == Visibility.Collapsed)
-                    AccountList.Visibility = (Visibility)AccountList.Tag;
+                AccountList.Visibility = (Visibility)AccountList.Tag;
                 AccountList.Tag = null;
 
-                if (Basket.Visibility == Visibility.Collapsed)
-                    Basket.Visibility = (Visibility)Basket.Tag;
+                Basket.Visibility = (Visibility)Basket.Tag;
                 Basket.Tag = null;
 
-                if (PasswordGenerator.Visibility == Visibility.Collapsed)
-                    PasswordGenerator.Visibility = (Visibility)PasswordGenerator.Tag;
+                PasswordGenerator.Visibility = (Visibility)PasswordGenerator.Tag;
                 PasswordGenerator.Tag = null;
             }
         }
