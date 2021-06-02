@@ -10,9 +10,7 @@
         Title="MainWindow" Height="450" Width="800" WindowStyle="None">
     <Border>
         <Button>
-            <i:Interaction.Behaviors>
-                <b:ChangeWindowState/>
-            </i:Interaction.Behaviors>
+
         </Button>
     </Border>
 </Window>

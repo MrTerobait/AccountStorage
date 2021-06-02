@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
-using AccountStorage.ViewModels;
 
 namespace AccountStorage
 {
@@ -164,9 +164,79 @@ namespace AccountStorage
 
         #endregion
 
-        private void SettersOpenCloseButton(object sender, RoutedEventArgs e)
+        #region ManageViews
+        private void SwitchingToAccountListButton_Click(object sender, RoutedEventArgs e)
         {
-            //ViewPresenter.Child = new Setters();            
+            AccountList.Visibility = Visibility.Visible;
+            Basket.Visibility = Visibility.Collapsed;
         }
+
+        private void SwitchingToBasketButton_Click(object sender, RoutedEventArgs e)
+        {
+            Basket.Visibility = Visibility.Visible;
+            AccountList.Visibility = Visibility.Collapsed;
+        }
+
+        private void ControlPasswordGeneratorVisibilityToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (PasswordGenerator.Visibility)
+            {
+                case Visibility.Collapsed:
+                    PasswordGenerator.Visibility = Visibility.Visible;
+                    break;
+                case Visibility.Visible:
+                    PasswordGenerator.Visibility = Visibility.Collapsed;
+                    break;
+            }
+        }
+
+        private void ControlSettersVisibilityButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Setters.Visibility)
+            {
+                case Visibility.Collapsed:
+                    AccountListButton.Click += ControlSettersVisibilityButton_Click;
+                    BasketButton.Click += ControlSettersVisibilityButton_Click;
+                    PasswordGeneratorButton.Click += ControlSettersVisibilityButton_Click;
+                    Setters.Visibility = Visibility.Visible;
+                    break;
+                case Visibility.Visible:
+                    AccountListButton.Click -= ControlSettersVisibilityButton_Click;
+                    BasketButton.Click -= ControlSettersVisibilityButton_Click;
+                    PasswordGeneratorButton.Click -= ControlSettersVisibilityButton_Click;
+                    Setters.Visibility = Visibility.Collapsed;
+                    break;
+            }
+        }
+
+        private void Setters_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Setters.Visibility == Visibility.Visible)
+            {
+                AccountList.Tag = AccountList.Visibility;
+                AccountList.Visibility = Visibility.Collapsed;
+
+                Basket.Tag = Basket.Visibility;
+                Basket.Visibility = Visibility.Collapsed;
+
+                PasswordGenerator.Tag = PasswordGenerator.Visibility;
+                PasswordGenerator.Visibility = Visibility.Collapsed;
+            }
+            else if(Setters.Visibility == Visibility.Collapsed)
+            {
+                if (AccountList.Visibility == Visibility.Collapsed)
+                    AccountList.Visibility = (Visibility)AccountList.Tag;
+                AccountList.Tag = null;
+
+                if (Basket.Visibility == Visibility.Collapsed)
+                    Basket.Visibility = (Visibility)Basket.Tag;
+                Basket.Tag = null;
+
+                if (PasswordGenerator.Visibility == Visibility.Collapsed)
+                    PasswordGenerator.Visibility = (Visibility)PasswordGenerator.Tag;
+                PasswordGenerator.Tag = null;
+            }
+        }
+        #endregion
     }
 }

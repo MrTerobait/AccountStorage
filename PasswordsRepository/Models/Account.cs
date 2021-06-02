@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace AccountStorage.Models
 {
-
     public class Account
     {
         public string Description { get; set; }
         public string Login { get; set; }
-        public string Link { get; set; }
+        public ObservableCollection<string> Links { get; set; }
         private string _password;
         public string Password
         { 

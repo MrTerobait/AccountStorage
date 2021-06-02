@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:ic="http://schemas.fontawesome.com/icons/"
         xmlns:local="clr-namespace:AccountStorage"
         xmlns:vm="clr-namespace:AccountStorage.ViewModels"
+        xmlns:b="clr-namespace:AccountStorage.Behaviors"
         Height="450" Width="800" Title="Keys Keeper" WindowStyle="None"
         Background="White" BorderThickness="1" BorderBrush="Black"
         WindowState="Maximized">
@@ -15,57 +17,6 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="50"/>
     </WindowChrome.WindowChrome>
-    <Window.Resources>
-        <Style TargetType="ic:FontAwesome">
-            <Setter Property="FontSize" Value="30"/>
-            <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=ButtonBase}}"/>
-        </Style>
-        <Style TargetType="ButtonBase" x:Key="EmptyButton">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ButtonBase">
-                        <Border SnapsToDevicePixels="true" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
-                                Background="{TemplateBinding Background}">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True" 
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightGray"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="ToggleButton" x:Key="EmptyToggleButton" BasedOn="{StaticResource EmptyButton}">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="LightGray"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="False">
-                    <Setter Property="Background" Value="White"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="ListBoxItem">
-            <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <ContentPresenter Margin="0,10"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -75,7 +26,7 @@
         <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0 0 0 3" WindowChrome.IsHitTestVisibleInChrome="True">
             <Grid>
                 <Button Style="{StaticResource EmptyButton}" HorizontalAlignment="Left" ToolTip="Настройки"
-                        Click="SettersOpenCloseButton">
+                        Click="ControlSettersVisibilityButton_Click">
                     <ic:FontAwesome Icon="Solid_Cogs"/>
                 </Button>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -91,64 +42,60 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <Border Grid.Row="1" x:Name="ViewPresenter">
-            <DockPanel>
-                <DockPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource EmptyButton}">
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-                        <Setter Property="FontSize" Value="20"/>
-                        <Setter Property="Margin" Value="10 20"/>
-                        <Setter Property="Width" Value="250"/>
-                        <Setter Property="Height" Value="40"/>
-                        <Setter Property="BorderThickness" Value="2"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                    </Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource EmptyButton}" x:Key="AccountButton">
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Height" Value="30"/>
-                        <Setter Property="Effect">
-                            <Setter.Value>
-                                <DropShadowEffect RenderingBias="Performance"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DockPanel.Resources>
-                <Button DockPanel.Dock="Top" Content="Добавить аккаунт" Command="{Binding AddAccountCommand}"/>
-                <Border CornerRadius="10" BorderThickness="5" BorderBrush="Black" Margin="10">
-                    <ScrollViewer>
-                        <ListBox ItemsSource="{Binding AccountList}" BorderThickness="0">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Margin="20 10" HorizontalAlignment="Stretch"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Button Style="{StaticResource AccountButton}" Content="{Binding Description}"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
-                </Border>
-            </DockPanel>
-        </Border>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <local:AccountList Grid.Column="0" x:Name="AccountList"/>
+            <local:Basket Grid.Column="0" Visibility="Collapsed" x:Name="Basket"/>
+            <local:Setters Grid.Column="0" Visibility="Collapsed" x:Name="Setters" IsVisibleChanged="Setters_IsVisibleChanged"/>
+            <local:PasswordGenerator Grid.Column="1" Visibility="Collapsed" x:Name="PasswordGenerator"/>
+        </Grid>
         <Border Grid.Row="2" BorderThickness="0 2 0 0" BorderBrush="Black" Margin="0 10 0 0">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource EmptyButton}">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button" x:Key="BlueButton" BasedOn="{StaticResource EmptyButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="Blue"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style TargetType="Button" x:Key="RedButton" BasedOn="{StaticResource EmptyButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="Red"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button x:Name="AccountListButton" ToolTip="Список аккаунтов" IsEnabled="False" Style="{StaticResource BlueButton}"
+                            Click="SwitchingToAccountListButton_Click">
                         <ic:FontAwesome Icon="Regular_ListAlt" FontSize="20"/>
                     </Button>
-                    <Button Style="{StaticResource EmptyButton}">
+                    <Button x:Name="BasketButton" ToolTip="Корзина" Style="{StaticResource RedButton}"
+                            Click="SwitchingToBasketButton_Click">
                         <ic:FontAwesome Icon="Regular_TrashAlt" FontSize="20"/>
                     </Button>
+                    <i:Interaction.Behaviors>
+                        <b:ChooseButtonBehavior/>
+                    </i:Interaction.Behaviors>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource EmptyButton}">
+                    <StackPanel.Resources>
+                        <Style TargetType="ToggleButton" BasedOn="{StaticResource EmptyButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="DarkGreen"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
+                    <ToggleButton x:Name="PasswordGeneratorButton" ToolTip="Генератор пароля" Click="ControlPasswordGeneratorVisibilityToggleButton_Click">
                         <ic:FontAwesome Icon="Solid_Dice" FontSize="20"/>
-                    </Button>
+                    </ToggleButton>
                 </StackPanel>
             </Grid>
         </Border>
