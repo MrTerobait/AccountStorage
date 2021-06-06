@@ -1,18 +1,18 @@
-﻿<Window x:Class="AccountStorage.MainWindow"
+﻿<Window x:Class="AccountStorage.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:ic="http://schemas.fontawesome.com/icons/"
-        xmlns:local="clr-namespace:AccountStorage"
+        xmlns:local="clr-namespace:AccountStorage.View"
         xmlns:vm="clr-namespace:AccountStorage.ViewModels"
         xmlns:b="clr-namespace:AccountStorage.Behaviors"
         Height="450" Width="800" Title="Keys Keeper" WindowStyle="None"
         Background="White" BorderThickness="1" BorderBrush="Black"
         WindowState="Maximized">
     <Window.DataContext>
-        <vm:MainWindowVM/>
+        <vm:MainVM/>
     </Window.DataContext>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="50"/>
@@ -47,8 +47,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <local:AccountList Grid.Column="0" x:Name="AccountList"/>
-            <local:Basket Grid.Column="0" Visibility="Collapsed" x:Name="Basket"/>
+            <local:AccountList Grid.Column="0" x:Name="AccountList" DataContext="{Binding AccountListVM}"/>
+            <local:Basket Grid.Column="0" Visibility="Collapsed" x:Name="Basket" DataContext="{Binding BasketVM}"/>
             <local:Setters Grid.Column="0" Visibility="Collapsed" x:Name="Setters" IsVisibleChanged="Setters_IsVisibleChanged"/>
             <local:PasswordGenerator Grid.Column="1" Visibility="Collapsed" x:Name="PasswordGenerator"/>
         </Grid>

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AccountStorage
+namespace AccountStorage.View
 {
     /// <summary>
     /// Interaction logic for BasketList.xaml

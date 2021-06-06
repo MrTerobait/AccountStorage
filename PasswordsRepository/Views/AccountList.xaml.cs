@@ -1,6 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
-namespace AccountStorage
+namespace AccountStorage.View
 {
     /// <summary>
     /// Interaction logic for AccountList.xaml
@@ -10,6 +11,21 @@ namespace AccountStorage
         public AccountList()
         {
             InitializeComponent();
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            if (listBox.SelectedItem == null)
+            {
+                SelectedAccountView.Visibility = Visibility.Collapsed;
+                AccountListView.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AccountListView.Visibility = Visibility.Collapsed;
+                SelectedAccountView.Visibility = Visibility.Visible;
+            }
         }
     }
 }
