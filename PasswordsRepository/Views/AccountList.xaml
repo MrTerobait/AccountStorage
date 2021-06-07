@@ -29,12 +29,13 @@
                     </Style.Triggers>
                 </Style>
             </DockPanel.Resources>
-            <Button DockPanel.Dock="Top" Content="Добавить аккаунт" Command="{Binding AddAccountCommand}" FontSize="20" Margin="10 20" Width="250" Height="40"
+            <Button DockPanel.Dock="Top" Content="Добавить аккаунт" Command="{Binding AddAccountCommand}" 
+                    FontSize="20" Margin="10 20" Width="250" Height="40"
                     BorderThickness="2" BorderBrush="Black"/>
             <Border CornerRadius="10" BorderThickness="5" BorderBrush="Black" Margin="10">
                 <ScrollViewer>
-                    <ListBox ItemsSource="{Binding AccountList}" SelectedItem="{Binding SelectedAccount}" BorderThickness="0" SelectionChanged="ListBox_SelectionChanged"
-                             >
+                    <ListBox ItemsSource="{Binding AccountList}" SelectedItem="{Binding SelectedAccount}" 
+                             BorderThickness="0" x:Name="AccountListBox" SelectionChanged="ListBox_SelectionChanged">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Margin="20 10" HorizontalAlignment="Stretch"/>
@@ -67,13 +68,13 @@
                 </ScrollViewer>
             </Border>
         </DockPanel>
-        <Grid x:Name="SelectedAccountView" DataContext="{Binding SelectedAccount, Mode=TwoWay}" Visibility="Collapsed">
+        <Grid x:Name="SelectedAccountView" DataContext="{Binding SelectedAccount}" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Width="300" Height="50" FontSize="20" Content="{Binding Description}"/>
-            <Button Width="300" Height="50" Background="Red" Grid.Column="1"/>
+            <TextBox Width="300" Height="50" FontSize="20" Text="{Binding Description}"/>
+            <Button Width="300" Height="50" Background="Red" Grid.Column="1" Click="CloseSelectedAccountViewButton_Click"/>
         </Grid>
     </Grid>
 </UserControl>

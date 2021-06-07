@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using AccountStorage.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace AccountStorage.View
@@ -26,6 +27,11 @@ namespace AccountStorage.View
                 AccountListView.Visibility = Visibility.Collapsed;
                 SelectedAccountView.Visibility = Visibility.Visible;
             }
+        }
+
+        private void CloseSelectedAccountViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            AccountListBox.SelectedItem = null;
         }
     }
 }

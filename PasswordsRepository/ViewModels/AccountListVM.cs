@@ -15,7 +15,7 @@ namespace AccountStorage.ViewModels
             get { return selectedAccount; }
             set
             {
-                if (AccountList.Contains(value))
+                if (AccountList.Contains(value) || value == null)
                     selectedAccount = value;
                 else throw new Exception("Account doesn't exist in the account list");
             }
