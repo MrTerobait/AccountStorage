@@ -1,14 +1,14 @@
-﻿using AccountStorage.Models;
-using AccountStorage.ViewModels.BaseTypes;
+﻿using AccountStorage.Commands;
+using AccountStorage.Models;
 using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
 namespace AccountStorage.ViewModels
 {
-    public class AccountListVM
+    public delegate void AccountRemovedHandler(object sender, Account removedAccount);
+    public class AccountListVM : UserControlVM
     {
-        public string Name { get; set; }
         private Account selectedAccount;
         public Account SelectedAccount
         {
@@ -20,36 +20,35 @@ namespace AccountStorage.ViewModels
                 else throw new Exception("Account doesn't exist in the account list");
             }
         }
-        public BindingList<Account> AccountList { get; }
-        public ICommand AddAccountCommand { get => new Command(AddAccount); }
+        public BindingList<Account> AccountList { get; set; }
+
+        public ICommand AddAccountCommand { get => new DelegateCommand(AddAccount); }
         private void AddAccount(object p)
         {
             AccountList.Add(new Account() { Description = $"{AccountList.Count + 1}" });
         }
-        public ICommand DeleteAccountCommand { get => new Command(DeleteAccount); }
-        private void DeleteAccount(object p)
+
+        public ICommand RemoveAccountCommand { get => new DelegateCommand(RemoveAccount); }
+
+        public event AccountRemovedHandler AccountRemoved;
+        private void RemoveAccount(object isNotify)
         {
-            var acc = p as Account;
-            AccountList.Remove(acc);
-        }
-        public ICommand RemoveAccountCommand { get => new Command(RemoveAccount); }
-        private void RemoveAccount(object p)
-        {
-            if (AccountList.Remove(SelectedAccount))
+            AccountList.Remove(SelectedAccount);
+            if ((bool)isNotify)
             {
-                AccountSended?.Invoke(this, SelectedAccount);
-                SelectedAccount = null;
+                AccountRemoved?.Invoke(this, SelectedAccount);
             }
+            SelectedAccount = null;
         }
-        public event Action<object, Account> AccountSended;
-        public ICommand DeleteAccountsCommand { get => new Command(DeleteAccounts); }
-        private void DeleteAccounts(object p)
+
+        public ICommand ClearAccountListCommand { get => new DelegateCommand(ClearAccountList); }
+        private void ClearAccountList(object p)
         {
             AccountList.Clear();
         }
-        public AccountListVM(BindingList<Account> accounts)
+        public AccountListVM(BindingList<Account> accountList)
         {
-            AccountList = accounts;
+            AccountList = accountList;
         }
     }
 }

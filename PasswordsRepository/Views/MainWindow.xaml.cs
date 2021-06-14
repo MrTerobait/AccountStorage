@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
 
 namespace AccountStorage.View
@@ -134,108 +133,6 @@ namespace AccountStorage.View
 
         [DllImport("User32")]
         internal static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
-        #endregion
-
-        #region ChangeWindowStateProperty
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-        private void ChangeWindowStateButton_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = sender as Button;
-            switch (WindowState)
-            {
-                case WindowState.Normal:
-                    WindowState = WindowState.Maximized;
-                    btn.ToolTip = "Уменьшить экран";
-                    break;
-                case WindowState.Maximized:
-                    WindowState = WindowState.Normal;
-                    btn.ToolTip = "Увеличить экран";
-                    break;
-            }
-        }
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        #endregion
-
-        #region ManageViews
-        private void SwitchingToAccountListButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Setters.Visibility == Visibility.Visible)
-                Setters.Visibility = Visibility.Collapsed;
-
-            AccountList.Visibility = Visibility.Visible;
-            Basket.Visibility = Visibility.Collapsed;
-        }
-
-        private void SwitchingToBasketButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Setters.Visibility == Visibility.Visible)
-                Setters.Visibility = Visibility.Collapsed;
-
-            Basket.Visibility = Visibility.Visible;
-            AccountList.Visibility = Visibility.Collapsed;
-        }
-
-        private void ControlPasswordGeneratorVisibilityToggleButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Setters.Visibility == Visibility.Visible)
-                Setters.Visibility = Visibility.Collapsed;
-
-            switch (PasswordGenerator.Visibility)
-            {
-                case Visibility.Collapsed:
-                    PasswordGenerator.Visibility = Visibility.Visible;
-                    break;
-                case Visibility.Visible:
-                    PasswordGenerator.Visibility = Visibility.Collapsed;
-                    break;
-            }
-        }
-
-        private void ControlSettersVisibilityButton_Click(object sender, RoutedEventArgs e)
-        {
-            switch (Setters.Visibility)
-            {
-                case Visibility.Collapsed:
-                    Setters.Visibility = Visibility.Visible;
-                    break;
-                case Visibility.Visible:
-                    Setters.Visibility = Visibility.Collapsed;
-                    break;
-            }
-        }
-
-        private void Setters_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (Setters.Visibility == Visibility.Visible)
-            {
-                AccountList.Tag = AccountList.Visibility;
-                AccountList.Visibility = Visibility.Collapsed;
-
-                Basket.Tag = Basket.Visibility;
-                Basket.Visibility = Visibility.Collapsed;
-
-                PasswordGenerator.Tag = PasswordGenerator.Visibility;
-                PasswordGenerator.Visibility = Visibility.Collapsed;
-            }
-            else if(Setters.Visibility == Visibility.Collapsed)
-            {
-                AccountList.Visibility = (Visibility)AccountList.Tag;
-                AccountList.Tag = null;
-
-                Basket.Visibility = (Visibility)Basket.Tag;
-                Basket.Tag = null;
-
-                PasswordGenerator.Visibility = (Visibility)PasswordGenerator.Tag;
-                PasswordGenerator.Tag = null;
-            }
-        }
         #endregion
     }
 }

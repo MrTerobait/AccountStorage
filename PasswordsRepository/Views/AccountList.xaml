@@ -57,9 +57,7 @@
                                         <f:FontAwesome Icon="Regular_TrashAlt" FontSize="14" Foreground="Red"/>
                                     </Button>
                                     <Button Style="{StaticResource AccountButton}" Grid.Column="1" Content="{Binding Description}">
-                                        <i:Interaction.Behaviors>
-                                            <b:SetDataContextAsSelectedItemBehavior/>
-                                        </i:Interaction.Behaviors>
+
                                     </Button>
                                 </Grid>
                             </DataTemplate>

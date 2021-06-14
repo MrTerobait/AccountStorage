@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TestWPFProject
+namespace WPFTest
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,11 @@ namespace TestWPFProject
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Maximized;
         }
     }
 }
